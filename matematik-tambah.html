@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tambah Mudah | Jom Belajar</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f8ff, #fff3d6);
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.game-box {
+    background: white;
+    border-radius: 25px;
+    padding: 30px 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.progress {
+    font-size: 18px;
+}
+
+.stars {
+    font-size: 25px;
+    margin: 10px;
+}
+
+.objects {
+    font-size: 38px;
+    min-height: 65px;
+    margin: 15px 0;
+    letter-spacing: 4px;
+}
+
+.question {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.listen {
+    border: none;
+    background: #7c5cff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    max-width: 450px;
+    margin: auto;
+}
+
+.answer {
+    border: none;
+    background: #f1f4f8;
+    padding: 18px;
+    border-radius: 18px;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.answer.correct {
+    background: #b8f5c5;
+}
+
+.answer.wrong {
+    background: #ffc4c4;
+}
+
+.feedback {
+    min-height: 35px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.celebration {
+    min-height: 40px;
+    font-size: 30px;
+}
+
+.result {
+    display: none;
+}
+
+.result h2 {
+    font-size: 32px;
+}
+
+.result-stars {
+    font-size: 45px;
+    margin: 20px;
+}
+
+.restart,
+.back {
+    border: none;
+    padding: 13px 22px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+.restart {
+    background: #ffb84d;
+}
+
+.back {
+    background: #e5e7eb;
+}
+
+@media (max-width: 500px) {
+
+    .question {
+        font-size: 38px;
+    }
+
+    .objects {
+        font-size: 30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🌈 Jom Belajar</div>
+</header>
+
+<div class="container">
+
+    <h1>➕ Tambah Mudah</h1>
+
+    <div class="subtitle">
+        Mari belajar tambah! 🎉
+    </div>
+
+    <div class="game-box" id="game">
+
+        <div class="progress">
+            Soalan <span id="questionNumber">1</span> / 10
+        </div>
+
+        <div class="stars" id="stars">
+            ⭐ 0
+        </div>
+
+        <div class="objects" id="objects"></div>
+
+        <div class="question" id="question">
+            1 + 1 = ?
+        </div>
+
+        <button class="listen" onclick="speakQuestion()">
+            🔊 Dengar Soalan
+        </button>
+
+        <div class="answers" id="answers"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="celebration" id="celebration"></div>
+
+    </div>
+
+    <div class="result" id="result">
+
+        <h2>🎉 Tahniah!</h2>
+
+        <p>Adik sudah selesai Tahap 2!</p>
+
+        <div class="result-stars" id="resultStars">
+            ⭐⭐⭐
+        </div>
+
+        <p id="resultText"></p>
+
+        <button class="restart" onclick="restartGame()">
+            🔄 Main Lagi
+        </button>
+
+        <button class="back" onclick="goBack()">
+            🏠 Menu Matematik
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+let questionNumber = 0;
+let score = 0;
+
+let number1;
+let number2;
+let correctAnswer;
+
+let answered = false;
+
+const totalQuestions = 10;
+
+const emojis = [
+    "🍎",
+    "🍊",
+    "⭐",
+    "🍓",
+    "🍌"
+];
+
+function createQuestion() {
+
+    answered = false;
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("celebration").innerText = "";
+
+    number1 = Math.floor(Math.random() * 5) + 1;
+    number2 = Math.floor(Math.random() * 5) + 1;
+
+    correctAnswer = number1 + number2;
+
+    document.getElementById("questionNumber").innerText =
+        questionNumber + 1;
+
+    document.getElementById("question").innerText =
+        number1 + " + " + number2 + " = ?";
+
+    createObjects();
+
+    createAnswers();
+}
+
+function createObjects() {
+
+    let emoji =
+        emojis[Math.floor(Math.random() * emojis.length)];
+
+    let group1 = "";
+    let group2 = "";
+
+    for (let i = 0; i < number1; i++) {
+        group1 += emoji;
+    }
+
+    for (let i = 0; i < number2; i++) {
+        group2 += emoji;
+    }
+
+    document.getElementById("objects").innerText =
+        group1 + "  +  " + group2;
+}
+
+function createAnswers() {
+
+    let choices = [correctAnswer];
+
+    while (choices.length < 4) {
+
+        let randomAnswer =
+            Math.floor(Math.random() * 10) + 1;
+
+        if (!choices.includes(randomAnswer)) {
+            choices.push(randomAnswer);
+        }
+    }
+
+    choices.sort(() => Math.random() - 0.5);
+
+    let html = "";
+
+    choices.forEach(answer => {
+
+        html += `
+            <button
+                class="answer"
+                onclick="checkAnswer(this, ${answer})">
+                ${answer}
+            </button>
+        `;
+    });
+
+    document.getElementById("answers").innerHTML = html;
+}
+
+function checkAnswer(button, answer) {
+
+    if (answered) return;
+
+    answered = true;
+
+    let buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (answer === correctAnswer) {
+
+        button.classList.add("correct");
+
+        score++;
+
+        document.getElementById("feedback").innerText =
+            "🎉 Betul! Hebat!";
+
+        document.getElementById("celebration").innerText =
+            "⭐ 🎉 ✨ 🎉 ⭐";
+
+        speak("Betul! Hebat!");
+
+    } else {
+
+        button.classList.add("wrong");
+
+        buttons.forEach(btn => {
+
+            if (Number(btn.innerText) === correctAnswer) {
+                btn.classList.add("correct");
+            }
+
+        });
+
+        document.getElementById("feedback").innerText =
+            "😊 Cuba lagi! Jawapan betul ialah " +
+            correctAnswer;
+
+        speak("Cuba lagi!");
+    }
+
+    document.getElementById("stars").innerText =
+        "⭐ " + score;
+
+    setTimeout(() => {
+
+        questionNumber++;
+
+        if (questionNumber < totalQuestions) {
+
+            createQuestion();
+
+        } else {
+
+            showResult();
+
+        }
+
+    }, 1300);
+}
+
+function showResult() {
+
+    document.getElementById("game").style.display =
+        "none";
+
+    document.getElementById("result").style.display =
+        "block";
+
+    document.getElementById("resultText").innerText =
+        "Markah adik: " + score + " / 10";
+
+    if (score >= 8) {
+
+        document.getElementById("resultStars").innerText =
+            "⭐⭐⭐";
+
+        speak("Tahniah! Hebat sekali!");
+
+    } else if (score >= 5) {
+
+        document.getElementById("resultStars").innerText =
+            "⭐⭐";
+
+        speak("Bagus! Jom cuba lagi!");
+
+    } else {
+
+        document.getElementById("resultStars").innerText =
+            "⭐";
+
+        speak("Bagus! Cuba lagi ya!");
+
+    }
+
+    localStorage.setItem(
+        "matematikTahap2",
+        "selesai"
+    );
+}
+
+function restartGame() {
+
+    questionNumber = 0;
+    score = 0;
+
+    document.getElementById("result").style.display =
+        "none";
+
+    document.getElementById("game").style.display =
+        "block";
+
+    document.getElementById("stars").innerText =
+        "⭐ 0";
+
+    createQuestion();
+}
+
+function speakQuestion() {
+
+    speak(
+        number1 + " tambah " +
+        number2 +
+        " sama dengan berapa?"
+    );
+}
+
+function speak(text) {
+
+    if ("speechSynthesis" in window) {
+
+        let speech =
+            new SpeechSynthesisUtterance(text);
+
+        speech.lang = "ms-MY";
+        speech.rate = 0.9;
+        speech.pitch = 1.1;
+
+        speechSynthesis.cancel();
+        speechSynthesis.speak(speech);
+    }
+}
+
+function goBack() {
+
+    window.location.href =
+        "matematik-menu.html";
+}
+
+createQuestion();
+
+</script>
+
+</body>
+</html>

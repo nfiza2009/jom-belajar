@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kenal Huruf Jawi - Jom Belajar</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #fff7e6, #e8f8f5);
+    margin: 0;
+    text-align: center;
+    color: #333;
+}
+
+header {
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+header h1 {
+    margin: 0;
+    color: #6c5ce7;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.game-box {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.jawi-letter {
+    font-size: 100px;
+    margin: 20px;
+    color: #6c5ce7;
+    font-weight: bold;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    background: #f1f2f6;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.listen {
+    background: #74b9ff;
+    color: white;
+    font-size: 18px;
+}
+
+.answer.correct {
+    background: #55efc4;
+}
+
+.answer.wrong {
+    background: #ff7675;
+    color: white;
+}
+
+.feedback {
+    font-size: 22px;
+    font-weight: bold;
+    min-height: 35px;
+    margin: 15px;
+}
+
+.stars {
+    font-size: 24px;
+}
+
+.celebration {
+    font-size: 40px;
+    margin: 15px;
+}
+
+.result {
+    display: none;
+}
+
+.result h2 {
+    font-size: 32px;
+    color: #6c5ce7;
+}
+
+.restart {
+    background: #6c5ce7;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🕌 Jom Belajar Jawi!</h1>
+</header>
+
+<div class="container">
+
+    <div class="info">
+        <div>⭐ Markah: <span id="score">0</span></div>
+        <div>Soalan <span id="questionNumber">1</span>/10</div>
+    </div>
+
+    <div class="stars" id="stars">⭐</div>
+
+    <div class="game-box" id="game">
+
+        <h2>🔤 Huruf apakah ini?</h2>
+
+        <div class="jawi-letter" id="jawiLetter">ا</div>
+
+        <button class="listen" onclick="speakLetter()">
+            🔊 Dengar
+        </button>
+
+        <div id="answers"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="celebration" id="celebration"></div>
+
+    </div>
+
+    <div class="game-box result" id="result">
+
+        <h2>🎉 Tahniah!</h2>
+
+        <p id="finalMessage"></p>
+
+        <div class="celebration">
+            🎉 ⭐ 🌟 ⭐ 🎉
+        </div>
+
+        <button class="restart" onclick="restartGame()">
+            🔄 Main Lagi
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+    {
+        letter: "ا",
+        answer: "Alif",
+        choices: ["Alif", "Ba", "Ta", "Jim"]
+    },
+    {
+        letter: "ب",
+        answer: "Ba",
+        choices: ["Ta", "Ba", "Jim", "Dal"]
+    },
+    {
+        letter: "ت",
+        answer: "Ta",
+        choices: ["Ba", "Ta", "Sin", "Mim"]
+    },
+    {
+        letter: "ث",
+        answer: "Tha",
+        choices: ["Tha", "Jim", "Dal", "Ra"]
+    },
+    {
+        letter: "ج",
+        answer: "Jim",
+        choices: ["Ba", "Jim", "Ca", "Sin"]
+    },
+    {
+        letter: "چ",
+        answer: "Ca",
+        choices: ["Ca", "Ta", "Dal", "Mim"]
+    },
+    {
+        letter: "د",
+        answer: "Dal",
+        choices: ["Ra", "Dal", "Jim", "Ba"]
+    },
+    {
+        letter: "ر",
+        answer: "Ra",
+        choices: ["Ra", "Sin", "Ta", "Ca"]
+    },
+    {
+        letter: "س",
+        answer: "Sin",
+        choices: ["Mim", "Sin", "Ba", "Dal"]
+    },
+    {
+        letter: "م",
+        answer: "Mim",
+        choices: ["Jim", "Ra", "Mim", "Ta"]
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+
+    answered = false;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("jawiLetter").textContent = q.letter;
+
+    document.getElementById("questionNumber").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("celebration").textContent = "";
+
+    const answersDiv = document.getElementById("answers");
+
+    answersDiv.innerHTML = "";
+
+    q.choices.forEach(choice => {
+
+        const button = document.createElement("button");
+
+        button.className = "answer";
+        button.textContent = choice;
+
+        button.onclick = function() {
+            checkAnswer(button, choice);
+        };
+
+        answersDiv.appendChild(button);
+
+    });
+}
+
+function checkAnswer(button, choice) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const correctAnswer = questions[currentQuestion].answer;
+
+    const allButtons = document.querySelectorAll(".answer");
+
+    allButtons.forEach(btn => {
+        btn.disabled = true;
+
+        if (btn.textContent === correctAnswer) {
+            btn.classList.add("correct");
+        }
+    });
+
+    if (choice === correctAnswer) {
+
+        score++;
+
+        document.getElementById("score").textContent = score;
+
+        button.classList.add("correct");
+
+        document.getElementById("feedback").textContent =
+            "🎉 Betul! Hebat!";
+
+        document.getElementById("celebration").textContent =
+            "🎉 ⭐ ✨ ⭐ 🎉";
+
+        speak("Betul! Hebat!");
+
+    } else {
+
+        button.classList.add("wrong");
+
+        document.getElementById("feedback").textContent =
+            "😊 Cuba lagi! Jawapan betul ialah " + correctAnswer;
+
+        speak("Cuba lagi!");
+
+    }
+
+    setTimeout(nextQuestion, 1500);
+}
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+
+        loadQuestion();
+
+    } else {
+
+        showResult();
+
+    }
+}
+
+function showResult() {
+
+    document.getElementById("game").style.display = "none";
+
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("finalMessage").textContent =
+        "Markah kamu ialah " + score + " daripada 10! 🌟";
+
+    localStorage.setItem("jawiTahap1", "selesai");
+
+    speak("Tahniah! Kamu sudah selesai tahap pertama Jawi!");
+
+}
+
+function restartGame() {
+
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("score").textContent = "0";
+
+    document.getElementById("game").style.display = "block";
+
+    document.getElementById("result").style.display = "none";
+
+    loadQuestion();
+}
+
+function speak(text) {
+
+    if ("speechSynthesis" in window) {
+
+        speechSynthesis.cancel();
+
+        const speech = new SpeechSynthesisUtterance(text);
+
+        speech.lang = "ms-MY";
+        speech.rate = 0.9;
+        speech.pitch = 1.1;
+
+        speechSynthesis.speak(speech);
+    }
+}
+
+function speakLetter() {
+
+    const answer = questions[currentQuestion].answer;
+
+    speak(answer);
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>

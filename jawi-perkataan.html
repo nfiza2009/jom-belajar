@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Perkataan Jawi - Jom Belajar</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #fff7e6, #e8f8f5);
+    margin: 0;
+    text-align: center;
+    color: #333;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+header h1 {
+    margin: 0;
+    color: #6c5ce7;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.stars {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.game-box {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.picture {
+    font-size: 80px;
+    margin: 15px;
+}
+
+.jawi-word {
+    font-size: 65px;
+    color: #6c5ce7;
+    font-weight: bold;
+    margin: 20px;
+    direction: rtl;
+}
+
+.question {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.listen {
+    background: #74b9ff;
+    color: white;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    background: #f1f2f6;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.answer.correct {
+    background: #55efc4;
+}
+
+.answer.wrong {
+    background: #ff7675;
+    color: white;
+}
+
+.feedback {
+    font-size: 22px;
+    font-weight: bold;
+    min-height: 35px;
+    margin: 15px;
+}
+
+.celebration {
+    font-size: 40px;
+    margin: 15px;
+}
+
+.result {
+    display: none;
+}
+
+.result h2 {
+    color: #6c5ce7;
+    font-size: 32px;
+}
+
+.restart {
+    background: #6c5ce7;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🕌 Jom Belajar Jawi!</h1>
+</header>
+
+<div class="container">
+
+    <div class="info">
+        <div>⭐ Markah: <span id="score">0</span></div>
+        <div>Soalan <span id="questionNumber">1</span>/10</div>
+    </div>
+
+    <div class="stars">
+        ⭐ ⭐ ⭐
+    </div>
+
+    <div class="game-box" id="game">
+
+        <div class="question">
+            📝 Apakah perkataan ini?
+        </div>
+
+        <div class="picture" id="picture">👕</div>
+
+        <div class="jawi-word" id="jawiWord">
+            باجو
+        </div>
+
+        <button class="listen" onclick="speakAnswer()">
+            🔊 Dengar
+        </button>
+
+        <div id="answers"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="celebration" id="celebration"></div>
+
+    </div>
+
+    <div class="game-box result" id="result">
+
+        <h2>🎉 Tahniah!</h2>
+
+        <p id="finalMessage"></p>
+
+        <div class="celebration">
+            🎉 ⭐ 🌟 ⭐ 🎉
+        </div>
+
+        <button class="restart" onclick="restartGame()">
+            🔄 Main Lagi
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+
+    {
+        jawi: "باجو",
+        word: "BAJU",
+        picture: "👕",
+        choices: ["BAJU", "BOLA", "BUKU", "TOPI"]
+    },
+
+    {
+        jawi: "بولا",
+        word: "BOLA",
+        picture: "⚽",
+        choices: ["BUKU", "BOLA", "ROTI", "BAJU"]
+    },
+
+    {
+        jawi: "بوکو",
+        word: "BUKU",
+        picture: "📚",
+        choices: ["BUKU", "KUDA", "MATA", "SUSU"]
+    },
+
+    {
+        jawi: "کودا",
+        word: "KUDA",
+        picture: "🐴",
+        choices: ["KAKI", "KUDA", "TOPI", "BOLA"]
+    },
+
+    {
+        jawi: "مات",
+        word: "MATA",
+        picture: "👀",
+        choices: ["MATA", "BAJU", "BUKU", "ROTI"]
+    },
+
+    {
+        jawi: "کاکي",
+        word: "KAKI",
+        picture: "🦶",
+        choices: ["SUSU", "KAKI", "BOLA", "KUDA"]
+    },
+
+    {
+        jawi: "روتي",
+        word: "ROTI",
+        picture: "🍞",
+        choices: ["ROTI", "TOPI", "BUKU", "MATA"]
+    },
+
+    {
+        jawi: "سوسو",
+        word: "SUSU",
+        picture: "🥛",
+        choices: ["BAJU", "SUSU", "BOLA", "KAKI"]
+    },
+
+    {
+        jawi: "ساڤو",
+        word: "SAPU",
+        picture: "🧹",
+        choices: ["SAPU", "ROTI", "KUDA", "BUKU"]
+    },
+
+    {
+        jawi: "توڤي",
+        word: "TOPI",
+        picture: "🧢",
+        choices: ["TOPI", "MATA", "SUSU", "BAJU"]
+    }
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+
+    answered = false;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("jawiWord").textContent =
+        q.jawi;
+
+    document.getElementById("picture").textContent =
+        q.picture;
+
+    document.getElementById("questionNumber").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("feedback").textContent = "";
+
+    document.getElementById("celebration").textContent = "";
+
+    const answersDiv =
+        document.getElementById("answers");
+
+    answersDiv.innerHTML = "";
+
+    q.choices.forEach(choice => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "answer";
+
+        button.textContent = choice;
+
+        button.onclick = function() {
+            checkAnswer(button, choice);
+        };
+
+        answersDiv.appendChild(button);
+
+    });
+
+}
+
+function checkAnswer(button, choice) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const correctAnswer =
+        questions[currentQuestion].word;
+
+    const allButtons =
+        document.querySelectorAll(".answer");
+
+    allButtons.forEach(btn => {
+
+        btn.disabled = true;
+
+        if (btn.textContent === correctAnswer) {
+            btn.classList.add("correct");
+        }
+
+    });
+
+    if (choice === correctAnswer) {
+
+        score++;
+
+        document.getElementById("score").textContent =
+            score;
+
+        button.classList.add("correct");
+
+        document.getElementById("feedback").textContent =
+            "🎉 Betul! Pandainya!";
+
+        document.getElementById("celebration").textContent =
+            "🎉 ⭐ ✨ ⭐ 🎉";
+
+        speak("Betul! Pandainya!");
+
+    } else {
+
+        button.classList.add("wrong");
+
+        document.getElementById("feedback").textContent =
+            "😊 Cuba lagi! Jawapan betul ialah " +
+            correctAnswer;
+
+        speak("Cuba lagi!");
+
+    }
+
+    setTimeout(nextQuestion, 1500);
+
+}
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+
+        loadQuestion();
+
+    } else {
+
+        showResult();
+
+    }
+
+}
+
+function showResult() {
+
+    document.getElementById("game").style.display =
+        "none";
+
+    document.getElementById("result").style.display =
+        "block";
+
+    document.getElementById("finalMessage").textContent =
+        "Markah kamu ialah " + score + " daripada 10! 🌟";
+
+    localStorage.setItem("jawiTahap4", "selesai");
+
+    speak(
+        "Tahniah! Kamu sudah selesai tahap keempat Jawi!"
+    );
+
+}
+
+function restartGame() {
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    document.getElementById("score").textContent =
+        "0";
+
+    document.getElementById("game").style.display =
+        "block";
+
+    document.getElementById("result").style.display =
+        "none";
+
+    loadQuestion();
+
+}
+
+function speak(text) {
+
+    if ("speechSynthesis" in window) {
+
+        speechSynthesis.cancel();
+
+        const speech =
+            new SpeechSynthesisUtterance(text);
+
+        speech.lang = "ms-MY";
+
+        speech.rate = 0.9;
+
+        speech.pitch = 1.1;
+
+        speechSynthesis.speak(speech);
+
+    }
+
+}
+
+function speakAnswer() {
+
+    const answer =
+        questions[currentQuestion].word;
+
+    speak(answer);
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>

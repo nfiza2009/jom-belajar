@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Jom Membaca | Jom Belajar</title>
+
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #eef7ff;
+
+            text-align: center;
+
+            margin: 0;
+
+            padding: 30px 15px;
+
+        }
+
+
+        .game {
+
+            background: white;
+
+            max-width: 600px;
+
+            margin: auto;
+
+            padding: 30px;
+
+            border-radius: 30px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.1);
+
+        }
+
+
+        h1 {
+
+            color: #5b7cfa;
+
+            font-size: 40px;
+
+        }
+
+
+        .subtitle {
+
+            color: #777;
+
+            font-size: 18px;
+
+        }
+
+
+        .score {
+
+            font-size: 20px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .progress {
+
+            color: #888;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .stars {
+
+            font-size: 32px;
+
+            margin: 15px;
+
+        }
+
+
+        /* HURUF */
+
+        .letter {
+
+            font-size: 110px;
+
+            font-weight: bold;
+
+            color: #5b7cfa;
+
+            background: #eef2ff;
+
+            width: 180px;
+
+            height: 180px;
+
+            margin: 20px auto;
+
+            border-radius: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        /* BUTANG SUARA */
+
+        .listen {
+
+            background: #70c1b3;
+
+            color: white;
+
+            border: none;
+
+            padding: 14px 25px;
+
+            border-radius: 15px;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .listen:hover {
+
+            transform: scale(1.05);
+
+        }
+
+
+        /* JAWAPAN */
+
+        .answers {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+
+        }
+
+
+        .answer {
+
+            background: #ffd166;
+
+            border: none;
+
+            padding: 20px;
+
+            border-radius: 18px;
+
+            font-size: 28px;
+
+            cursor: pointer;
+
+        }
+
+
+        .answer:hover {
+
+            transform: scale(1.05);
+
+        }
+
+
+        .answer.correct {
+
+            background: #8fd694;
+
+            color: white;
+
+        }
+
+
+        .answer.wrong {
+
+            background: #ff8a80;
+
+            color: white;
+
+        }
+
+
+        .feedback {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            margin-top: 20px;
+
+            min-height: 30px;
+
+            animation: pop 0.4s ease;
+
+        }
+
+
+        @keyframes pop {
+
+            0% {
+
+                transform: scale(0.8);
+
+                opacity: 0;
+
+            }
+
+            100% {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        .celebration {
+
+            font-size: 40px;
+
+            min-height: 50px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .celebrate {
+
+            animation: celebrate 0.7s ease;
+
+        }
+
+
+        @keyframes celebrate {
+
+            0% {
+
+                transform: scale(0);
+
+                opacity: 0;
+
+            }
+
+            50% {
+
+                transform: scale(1.4);
+
+            }
+
+            100% {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        .next,
+        .restart {
+
+            background: #70c1b3;
+
+            color: white;
+
+            border: none;
+
+            padding: 15px 30px;
+
+            border-radius: 15px;
+
+            font-size: 20px;
+
+            margin-top: 20px;
+
+            cursor: pointer;
+
+        }
+
+
+        .hidden {
+
+            display: none;
+
+        }
+
+
+        .final-score {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin: 20px;
+
+            color: #5b7cfa;
+
+        }
+
+
+        .emoji-result {
+
+            font-size: 60px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+
+    <!-- GAME -->
+
+    <div id="gameScreen">
+
+        <h1>📖 Jom Membaca!</h1>
+
+
+        <p class="subtitle">
+
+            Kenal huruf sambil bermain 🎮
+
+        </p>
+
+
+        <div class="score">
+
+            ⭐ Markah:
+
+            <span id="score">0</span>
+
+        </div>
+
+
+        <div class="progress">
+
+            Soalan
+
+            <span id="questionNumber">1</span>
+
+            / 10
+
+        </div>
+
+
+        <div class="stars" id="stars">
+
+            ☆☆☆☆☆
+
+        </div>
+
+
+        <!-- HURUF -->
+
+        <div class="letter" id="letter">
+
+            A
+
+        </div>
+
+
+        <!-- BUTANG DENGAR -->
+
+        <button
+
+            class="listen"
+
+            onclick="speakLetter()">
+
+            🔊 Dengar Huruf
+
+        </button>
+
+
+        <!-- JAWAPAN -->
+
+        <div
+
+            class="answers"
+
+            id="answers">
+
+        </div>
+
+
+        <div
+
+            class="feedback"
+
+            id="feedback">
+
+        </div>
+
+
+        <div
+
+            class="celebration"
+
+            id="celebration">
+
+        </div>
+
+
+        <button
+
+            class="next hidden"
+
+            id="nextButton"
+
+            onclick="nextQuestion()">
+
+            Soalan Seterusnya ➡️
+
+        </button>
+
+
+    </div>
+
+
+    <!-- KEPUTUSAN -->
+
+    <div
+
+        id="resultScreen"
+
+        class="hidden">
+
+
+        <div class="emoji-result">
+
+            🎉
+
+        </div>
+
+
+        <h1>
+
+            Tahniah!
+
+        </h1>
+
+
+        <p class="final-score">
+
+            Markah kamu:
+
+            <br>
+
+            <span id="finalScore">
+
+            </span>
+
+            / 10
+
+        </p>
+
+
+        <div
+
+            class="stars"
+
+            id="finalStars">
+
+            ☆☆☆☆☆
+
+        </div>
+
+
+        <p id="resultMessage"></p>
+
+
+        <button
+
+            class="restart"
+
+            onclick="location.reload()">
+
+            🔄 Main Lagi
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* DATA HURUF */
+
+const letters = [
+
+    "A",
+
+    "B",
+
+    "C",
+
+    "D",
+
+    "E",
+
+    "F",
+
+    "G",
+
+    "H",
+
+    "I",
+
+    "J"
+
+];
+
+
+let score = 0;
+
+let questionNumber = 0;
+
+let correctAnswer = "";
+
+
+/* MULAKAN GAME */
+
+createQuestion();
+
+
+/* CIPTA SOALAN */
+
+function createQuestion() {
+
+
+    document
+
+        .getElementById("feedback")
+
+        .innerText = "";
+
+
+    document
+
+        .getElementById("celebration")
+
+        .innerText = "";
+
+
+    document
+
+        .getElementById("nextButton")
+
+        .classList.add("hidden");
+
+
+    let randomIndex =
+
+        Math.floor(
+
+            Math.random() *
+
+            letters.length
+
+        );
+
+
+    correctAnswer =
+
+        letters[randomIndex];
+
+
+    document
+
+        .getElementById("letter")
+
+        .innerText =
+
+        correctAnswer;
+
+
+    document
+
+        .getElementById("questionNumber")
+
+        .innerText =
+
+        questionNumber + 1;
+
+
+    createAnswers();
+
+}
+
+
+/* CIPTA PILIHAN JAWAPAN */
+
+function createAnswers() {
+
+
+    let answerArea =
+
+        document.getElementById("answers");
+
+
+    answerArea.innerHTML = "";
+
+
+    let choices = [
+
+        correctAnswer
+
+    ];
+
+
+    while (choices.length < 4) {
+
+
+        let randomLetter =
+
+            letters[
+
+                Math.floor(
+
+                    Math.random() *
+
+                    letters.length
+
+                )
+
+            ];
+
+
+        if (!choices.includes(randomLetter)) {
+
+            choices.push(randomLetter);
+
+        }
+
+    }
+
+
+    choices.sort(
+
+        () => Math.random() - 0.5
+
+    );
+
+
+    choices.forEach(
+
+        function(letter) {
+
+
+            let button =
+
+                document.createElement(
+
+                    "button"
+
+                );
+
+
+            button.className =
+
+                "answer";
+
+
+            button.innerText =
+
+                letter;
+
+
+            button.onclick =
+
+                function() {
+
+                    checkAnswer(letter);
+
+                };
+
+
+            answerArea.appendChild(
+
+                button
+
+            );
+
+        }
+
+    );
+
+}
+
+
+/* SEMAK JAWAPAN */
+
+function checkAnswer(answer) {
+
+
+    let feedback =
+
+        document.getElementById(
+
+            "feedback"
+
+        );
+
+
+    let buttons =
+
+        document.querySelectorAll(
+
+            ".answer"
+
+        );
+
+
+    buttons.forEach(
+
+        function(button) {
+
+            button.disabled = true;
+
+        }
+
+    );
+
+
+    if (answer === correctAnswer) {
+
+
+        score++;
+
+
+        feedback.innerText =
+
+            "🎉 Betul! Hebat!";
+
+
+        speak(
+
+            "Betul! Hebat!"
+
+        );
+
+
+        buttons.forEach(
+
+            function(button) {
+
+
+                if (
+
+                    button.innerText ===
+
+                    correctAnswer
+
+                ) {
+
+                    button.classList.add(
+
+                        "correct"
+
+                    );
+
+                }
+
+            }
+
+        );
+
+
+        let celebration =
+
+            document.getElementById(
+
+                "celebration"
+
+            );
+
+
+        celebration.innerText =
+
+            "🎉 ⭐ ✨ ⭐ 🎉";
+
+
+        celebration.classList.remove(
+
+            "celebrate"
+
+        );
+
+
+        void celebration.offsetWidth;
+
+
+        celebration.classList.add(
+
+            "celebrate"
+
+        );
+
+
+    }
+
+
+    else {
+
+
+        feedback.innerText =
+
+            "😊 Cuba lagi!";
+
+
+        speak(
+
+            "Cuba lagi!"
+
+        );
+
+
+        buttons.forEach(
+
+            function(button) {
+
+
+                if (
+
+                    button.innerText ===
+
+                    answer
+
+                ) {
+
+                    button.classList.add(
+
+                        "wrong"
+
+                    );
+
+                }
+
+
+                if (
+
+                    button.innerText ===
+
+                    correctAnswer
+
+                ) {
+
+                    button.classList.add(
+
+                        "correct"
+
+                    );
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    document
+
+        .getElementById("score")
+
+        .innerText = score;
+
+
+    updateStars();
+
+
+    document
+
+        .getElementById("nextButton")
+
+        .classList.remove(
+
+            "hidden"
+
+        );
+
+}
+
+
+/* BINTANG */
+
+function updateStars() {
+
+
+    let stars = "";
+
+
+    for (
+
+        let i = 0;
+
+        i < 5;
+
+        i++
+
+    ) {
+
+
+        if (
+
+            i < Math.min(score, 5)
+
+        ) {
+
+            stars += "⭐";
+
+        }
+
+        else {
+
+            stars += "☆";
+
+        }
+
+    }
+
+
+    document
+
+        .getElementById("stars")
+
+        .innerText = stars;
+
+}
+
+
+/* SOALAN SETERUSNYA */
+
+function nextQuestion() {
+
+
+    questionNumber++;
+
+
+    if (
+
+        questionNumber >= 10
+
+    ) {
+
+        showResult();
+
+        return;
+
+    }
+
+
+    createQuestion();
+
+}
+
+
+/* HASIL AKHIR */
+
+function showResult() {
+    localStorage.setItem("membacaTahap1", "selesai");
+
+
+    document
+
+        .getElementById("gameScreen")
+
+        .classList.add("hidden");
+
+
+    document
+
+        .getElementById("resultScreen")
+
+        .classList.remove("hidden");
+
+
+    document
+
+        .getElementById("finalScore")
+
+        .innerText = score;
+
+
+    let finalStars = "";
+
+
+    let starCount =
+
+        Math.ceil(score / 2);
+
+
+    for (
+
+        let i = 0;
+
+        i < 5;
+
+        i++
+
+    ) {
+
+
+        if (i < starCount) {
+
+            finalStars += "⭐";
+
+        }
+
+        else {
+
+            finalStars += "☆";
+
+        }
+
+    }
+
+
+    document
+
+        .getElementById("finalStars")
+
+        .innerText =
+
+        finalStars;
+
+
+    let message;
+
+
+    if (score === 10) {
+
+        message =
+
+            "🏆 Hebat! Semua betul!";
+
+    }
+
+    else if (score >= 7) {
+
+        message =
+
+            "🌟 Bagus! Teruskan berlatih!";
+
+    }
+
+    else if (score >= 5) {
+
+        message =
+
+            "😊 Bagus! Cuba lagi untuk dapat lebih banyak markah!";
+
+    }
+
+    else {
+
+        message =
+
+            "💪 Jangan putus asa! Cuba lagi!";
+
+    }
+
+
+    document
+
+        .getElementById("resultMessage")
+
+        .innerText =
+
+        message;
+
+
+    speak(
+
+        "Tahniah! Jom cuba lagi!"
+
+    );
+
+}
+
+
+/* SUARA */
+
+function speak(text) {
+
+
+    if (
+
+        "speechSynthesis" in window
+
+    ) {
+
+
+        window.speechSynthesis.cancel();
+
+
+        let speech =
+
+            new SpeechSynthesisUtterance(
+
+                text
+
+            );
+
+
+        speech.lang = "ms-MY";
+
+        speech.rate = 0.9;
+
+        speech.pitch = 1.1;
+
+
+        window.speechSynthesis.speak(
+
+            speech
+
+        );
+
+    }
+
+}
+
+
+/* DENGAR HURUF */
+
+function speakLetter() {
+
+
+    speak(
+
+        "Huruf " +
+
+        correctAnswer
+
+    );
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

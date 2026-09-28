@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jom Belajar - Modul Membaca</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #fff7d6, #e8f7ff);
+    color: #333;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #6c63ff;
+}
+
+header h1 {
+    margin: 20px 0 5px;
+    font-size: 34px;
+}
+
+header p {
+    margin: 0;
+    color: #666;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 35px 20px;
+}
+
+.progress-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+}
+
+.progress-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.progress-bar {
+    height: 20px;
+    background: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #6c63ff, #8f88ff);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    margin-top: 10px;
+    color: #666;
+}
+
+.levels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.level {
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+    transition: 0.2s;
+}
+
+.level:hover {
+    transform: translateY(-5px);
+}
+
+.level-number {
+    font-size: 16px;
+    color: #777;
+    font-weight: bold;
+}
+
+.level-icon {
+    font-size: 55px;
+    margin: 10px 0;
+}
+
+.level h2 {
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+.level p {
+    color: #666;
+    min-height: 45px;
+}
+
+.play {
+    display: inline-block;
+    text-decoration: none;
+    background: #6c63ff;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.completed {
+    background: #39a852;
+}
+
+.badge {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+    color: #39a852;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.back a {
+    text-decoration: none;
+    color: #6c63ff;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+
+    .levels {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 28px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🌈 Jom Belajar
+    </div>
+
+    <h1>📖 Modul Membaca</h1>
+
+    <p>
+        Belajar membaca langkah demi langkah 🎮
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <div class="progress-card">
+
+        <div class="progress-title">
+            🌟 Perjalanan Membaca
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill">
+            </div>
+
+        </div>
+
+        <div
+            class="progress-text"
+            id="progressText">
+            0 daripada 5 tahap selesai
+        </div>
+
+    </div>
+
+
+    <div class="levels">
+
+
+        <div class="level">
+
+            <div class="level-number">
+                TAHAP 1
+            </div>
+
+            <div class="level-icon">
+                🔤
+            </div>
+
+            <h2>Kenal Huruf</h2>
+
+            <p>
+                Kenali huruf A hingga J
+                sambil bermain.
+            </p>
+
+            <a
+                class="play"
+                id="button1"
+                href="membaca.html">
+                🎮 Mula Belajar
+            </a>
+
+            <span
+                class="badge"
+                id="badge1">
+            </span>
+
+        </div>
+
+
+        <div class="level">
+
+            <div class="level-number">
+                TAHAP 2
+            </div>
+
+            <div class="level-icon">
+                🧩
+            </div>
+
+            <h2>Suku Kata</h2>
+
+            <p>
+                Kenali suku kata mudah
+                seperti BA, MA dan SA.
+            </p>
+
+            <a
+                class="play"
+                id="button2"
+                href="membaca-sukukata.html">
+                🎮 Mula Belajar
+            </a>
+
+            <span
+                class="badge"
+                id="badge2">
+            </span>
+
+        </div>
+
+
+        <div class="level">
+
+            <div class="level-number">
+                TAHAP 3
+            </div>
+
+            <div class="level-icon">
+                🔗
+            </div>
+
+            <h2>Cantum Suku Kata</h2>
+
+            <p>
+                Gabungkan suku kata menjadi
+                perkataan mudah.
+            </p>
+
+            <a
+                class="play"
+                id="button3"
+                href="cantum-sukukata.html">
+                🎮 Mula Belajar
+            </a>
+
+            <span
+                class="badge"
+                id="badge3">
+            </span>
+
+        </div>
+
+
+        <div class="level">
+
+            <div class="level-number">
+                TAHAP 4
+            </div>
+
+            <div class="level-icon">
+                📝
+            </div>
+
+            <h2>Perkataan Mudah</h2>
+
+            <p>
+                Belajar membaca perkataan
+                seperti BAJU dan BOLA.
+            </p>
+
+            <a
+                class="play"
+                id="button4"
+                href="perkataan-mudah.html">
+                🎮 Mula Belajar
+            </a>
+
+            <span
+                class="badge"
+                id="badge4">
+            </span>
+
+        </div>
+
+
+        <div class="level">
+
+            <div class="level-number">
+                TAHAP 5
+            </div>
+
+            <div class="level-icon">
+                📚
+            </div>
+
+            <h2>Ayat Mudah</h2>
+
+            <p>
+                Baca ayat pendek dengan
+                bantuan gambar.
+            </p>
+
+            <a
+                class="play"
+                id="button5"
+                href="ayat-mudah.html">
+                🎮 Mula Belajar
+            </a>
+
+            <span
+                class="badge"
+                id="badge5">
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="back">
+
+        <a href="index.html">
+            🏠 Kembali ke Utama
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const totalLevels = 5;
+
+function loadProgress() {
+
+    let completed = 0;
+
+    for (let i = 1; i <= totalLevels; i++) {
+
+        const done =
+            localStorage.getItem(
+                "membacaTahap" + i
+            );
+
+        if (done === "selesai") {
+
+            completed++;
+
+            document.getElementById(
+                "badge" + i
+            ).textContent =
+                "✅ Tahap selesai!";
+
+            document.getElementById(
+                "button" + i
+            ).textContent =
+                "🔄 Main Lagi";
+
+            document.getElementById(
+                "button" + i
+            ).classList.add("completed");
+        }
+    }
+
+    const percentage =
+        (completed / totalLevels) * 100;
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        percentage + "%";
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        completed +
+        " daripada " +
+        totalLevels +
+        " tahap selesai";
+}
+
+loadProgress();
+
+</script>
+
+</body>
+</html>
